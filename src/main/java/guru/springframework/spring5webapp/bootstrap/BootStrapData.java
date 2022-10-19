@@ -26,29 +26,50 @@ public class BootStrapData implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
+    System.out.println("Starting in Bootstrap");
+
+    // Publishers
+    Publisher publisher = new Publisher();
+    publisher.setName("SFG Publishing");
+    publisher.setCity("St Petersburg");
+    publisher.setState("FL");
+
+    publisherRepository.save(publisher);
+
+    // Authors
     Author eric = new Author("Eric", "Evans");
-    Book ddd = new Book("Domain Driven Design", "123123");
-
-    eric.getBooks().add(ddd);
-    ddd.getAuthors().add(eric);
-
-    authorRepository.save(eric);
-    bookRepository.save(ddd);
-
     Author rod = new Author("Rod", "Johnson");
+
+    // Books
+    Book ddd = new Book("Domain Driven Design", "123123");
     Book noEJB = new Book("J2EE Development without EJB", "567567");
 
-    eric.getBooks().add(noEJB);
-    ddd.getAuthors().add(rod);
+    // Set books with publisher
+    ddd.setPublisher(publisher);
+    noEJB.setPublisher(publisher);
 
+    // Set publishers with books
+    publisher.getBooks().add(ddd);
+    publisher.getBooks().add(noEJB);
+
+    // Set authors with books
+    eric.getBooks().add(ddd);
+    rod.getBooks().add(noEJB);
+
+    // Set books with authors
+    ddd.getAuthors().add(eric);
+    noEJB.getAuthors().add(rod);
+
+    // Create authors
+    authorRepository.save(eric);
     authorRepository.save(rod);
+
+    // Create books
+    bookRepository.save(ddd);
     bookRepository.save(noEJB);
 
-    System.out.println("Starting in Bootstrap");
     System.out.println("Number of Books: " + bookRepository.count());
-
-    Publisher pearson = new Publisher("Sky Avenue", "Beverly Hills", "California", 777);
-    publisherRepository.save(pearson);
+    System.out.println("Number of Authors: " + authorRepository.count());
     System.out.println("Number of Publishers: " + publisherRepository.count());
   }
 }
