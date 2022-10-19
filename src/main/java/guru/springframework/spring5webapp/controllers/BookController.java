@@ -17,6 +17,6 @@ public class BookController {
   @RequestMapping("/books")
   public String getBooks(Model model) {
     model.addAttribute("books", bookRepository.findAll()); // Set data into the model
-    return "Books/list"; // Thymeleaf template list.html
+    return "books/list"; // Thymeleaf template list.html
   }
 }
